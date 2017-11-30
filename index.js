@@ -17,7 +17,7 @@ var preliminaryScanResults;
 // to 10 times. If we are connected, then start the Vaani client.
 // If we never get a wifi connection, go into AP mode.
 // Before we start, though, let the user know that something is happening
-waitForWifi(1, 3000)
+waitForWifi(20, 3000)
   .then(() => {
     console.log('start the gateway');
     startVaani();
