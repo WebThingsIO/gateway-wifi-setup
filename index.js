@@ -220,7 +220,7 @@ function handleConnecting(request, response) {
     .then(() => waitForWifi(20, 3000))
     .then(() => {
     	console.log('start the gateway');
-    	startVaani();
+    	startGateway();
     	console.log('stop wifi setup');
     	stopWifiService();
      })
@@ -239,20 +239,20 @@ function handleStatus(request, response) {
   });
 }
 
-function startVaani() {
-  return run(platform.startVaani)
+function startGateway() {
+  return run(platform.startGateway)
     .then((out) => console.log('Gateway started', out))
     .catch((err) => console.error('Error starting Gateway:', err));
 }
 
-function stopVaani() {
-  return run(platform.stopVaani)
+function stopGateway() {
+  return run(platform.stopGateway)
     .then((out) => console.log('Gateway stopped', out))
     .catch((err) => console.error('Error stopping Gateway:', err));
 }
 
-function restartVaani() {
-  return run(platform.restartVaani)
+function restartGateway() {
+  return run(platform.restartGateway)
     .then((out) => console.log('Gateway restarted', out))
     .catch((err) => console.error('Error restarting Gateway:', err));
 }

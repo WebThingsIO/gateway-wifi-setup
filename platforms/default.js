@@ -2,11 +2,11 @@ module.exports = {
   platform: "default",
 
 //  startVaani: 'systemctl start vaani && systemctl start git-auto-updater',
-//  stopVaani: 'systemctl stop vaani && systemctl stop git-auto-updater',
-//  restartVaani: 'systemctl restart vaani && systemctl restart git-auto-updater',
-  startVaani: 'systemctl start mozilla-iot-gateway',
-  stopVaani: 'systemctl stop mozilla-iot-gateway',
-  restartVaani: 'systemctl restart mozilla-iot-gateway',
+//  stopGateway: 'systemctl stop Gateway && systemctl stop git-auto-updater',
+//  restartGateway: 'systemctl restart Gateway && systemctl restart git-auto-updater',
+  startGateway: 'systemctl start mozilla-iot-gateway',
+  stopGateway: 'systemctl stop mozilla-iot-gateway',
+  restartGateway: 'systemctl restart mozilla-iot-gateway',
   playAudio: 'aplay -q $AUDIO',
   stopWifiService: 'systemctl stop mozilla-gateway-wifi-setup',
 
