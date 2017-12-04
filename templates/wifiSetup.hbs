@@ -6,8 +6,8 @@
     <style>
         body {
           font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-          background-color: #fff;
-          color: #333;
+          background-color: #305067;
+          color: #fff;
           font-size: 100%;
         }
         
@@ -79,25 +79,49 @@
           border-bottom: 2px solid #333;
           padding: 0.3em 0;
         }
+
+        #step2 {
+            display: none;
+        }
     </style>
-    <title>Vaani Setup Step 1</title>
+    <script>
+          function selectssid(event){
+              document.getElementById('step1').style.display = 'none';
+              document.getElementById('step2').style.display = 'block';
+              document.getElementById('selected-network').innerText = event.value;
+          }
+
+          function back(event){
+              document.getElementById('step1').style.display = 'block';
+              document.getElementById('step2').style.display = 'none';
+              event.preventDefault();
+          }
+
+    </script>
+    <title>Mozilla Gateway</title>
   </head>
   <body>
-    <h1>Vaani Setup</h1>
-    <h2>Step 1: Wifi</h2>
-    <p>
-      In order for Vaani to work, it must first be able to connect to
-      the internet using your home wifi network. Select your home wifi
-      network then enter your wifi password and click 'Connect'.
-    </p>
     <form action="/connecting" method="post">
-      <select name="ssid" size="5">
-        {{#networks}}
-        <option value="{{this}}">{{this}}</option>
-        {{/networks}}
-      </select>
-      <input name="password" placeholder="WiFi Password" style="margin-top: 1em">
-      <button id="submit">Connect</button>
+        <div id="step1">
+            <h1>Welcome</h1>
+            <h2>Connect to a WiFi network?</h2>
+            <select onchange="selectssid(this)" id="ssid" name="ssid"
+                    size="5">
+                {{#networks}}
+                <option value="{{this1}}">{{this}}</option>
+                <option value="{{this2}}">{{this}}</option>
+                {{/networks}}
+            </select>
+            <input type="submit" id="skip" name="skip" value="Skip"/>
+        </div>
+        <div id="step2">
+            <h3 id="selected-network">{selected network}</h3>
+            <input name="password" placeholder="WiFi Password" style="margin-top: 1em">
+            <input id="showpassword" type="checkbox">
+            <label for="showpassword">Show password</label>
+            <button id="submit">Connect</button>
+            <button onclick="back(event)" >Back</button>
+        </div>
     </form>
   </body>
 </html>

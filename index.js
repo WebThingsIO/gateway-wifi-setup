@@ -13,14 +13,24 @@ var wait = require('./wait.js');
 // we've got to scan before we enter AP mode and save the results
 var preliminaryScanResults;
 
+// if the user decided to skip the wifi setup, we directly start the gateway
+// and exit
+if (fs.existsSync('wifiskip')) {
+    console.log('start the gateway');
+    startGateway();
+    console.log('stop wifi setup');
+    stopWifiService();
+    return;
+}
+
 // Wait until we have a working wifi connection. Retry every 3 seconds up
-// to 10 times. If we are connected, then start the Vaani client.
+// to 10 times. If we are connected, then start the Gateway client.
 // If we never get a wifi connection, go into AP mode.
 // Before we start, though, let the user know that something is happening
 waitForWifi(20, 3000)
   .then(() => {
     console.log('start the gateway');
-    startVaani();
+    startGateway();
     console.log('stop wifi setup');
     stopWifiService();
   })
@@ -117,7 +127,6 @@ function getTemplate(filename) {
 }
 
 var wifiSetupTemplate = getTemplate('./templates/wifiSetup.hbs');
-var oauthSetupTemplate = getTemplate('./templates/oauthSetup.hbs');
 var connectingTemplate = getTemplate('./templates/connecting.hbs');
 var statusTemplate = getTemplate('./templates/status.hbs');
 var hotspotTemplate = getTemplate('./templates/hotspot.hbs');
@@ -129,23 +138,23 @@ var hotspotTemplate = getTemplate('./templates/hotspot.hbs');
 function handleCaptive(request, response, next) {
   console.log('handleCaptive', request.path);
   if (request.path === '/hotspot.html') {
-	console.log('sending hotspot');
+	console.log('sending hotspot.html');
 	response.send(hotspotTemplate());
-  } else if (request.path === '/hotspot-detect.html' || 
+  } else if (request.path === '/hotspot-detect.html' ||
 	    request.path === '/connecttest.txt') {
-	console.log('CAPTIVE PORTAL REQUEST BY IOS OR MAC', request.path);
-	if (request.get('User-Agent').includes('CaptiveNetworkSupport') || 
+	console.log('ios or osx captive portal request', request.path);
+	if (request.get('User-Agent').includes('CaptiveNetworkSupport') ||
 	  request.get('User-Agent').includes('Microsoft NCSI')) {
-		console.log('redirect to hotspot.html');
+		console.log('windows captive portal request');
 		response.redirect(302, 'http://10.0.0.1/hotspot.html');
 	} else {
 		response.redirect(302, 'http://10.0.0.1/wifiSetup');
 	}
   } else if (request.path === '/generate_204' || request.path === '/fwlink/') {
-	console.log('no handle captive mas nao tem o header do captive network support. deve ser google');
+	console.log('android captive portal request');
         response.redirect(302, 'http://10.0.0.1/wifiSetup');
   } else {
-	console.log('no handle captive mas nao caiu em condicao nenhuma. passando');
+	console.log('skipping.');
    	next();
   }
 }
@@ -194,6 +203,16 @@ function handleWifiSetup(request, response) {
 }
 
 function handleConnecting(request, response) {
+
+  if (request.body.skip) {
+    fs.closeSync(fs.openSync('wifiskip', 'w'));
+    console.log('skip wifi setup. start the gateway');
+    startGateway();
+    console.log('stop wifi setup');
+    stopWifiService();
+    return;
+  }
+
   var ssid = request.body.ssid.trim();
   var password = request.body.password.trim();
 
@@ -225,7 +244,7 @@ function handleConnecting(request, response) {
     	stopWifiService();
      })
     .catch((error) => {
-	console.log('General Error:', error);
+	    console.log('General Error:', error);
     });
 }
 
