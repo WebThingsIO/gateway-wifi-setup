@@ -27,7 +27,7 @@ sed -n -e '
   /Quality=/,/ESSID:/H
   /ESSID:/{
     g
-    s/^.*Quality=\\([0-9]\\+\\).*ESSID:"\\([^"]*\\)".*$/\\1\t\\2/
+    s/^.*Quality=\\([0-9]\\+\\).*Encryption key:\\([a-z]\\+\\).*ESSID:"\\([^"]*\\)".*$/\\1\\3 \\2/
     p
     s/.*//
     x

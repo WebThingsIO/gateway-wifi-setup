@@ -84,10 +84,11 @@
 
     </style>
     <script>
-          function selectssid(event){
+          function selectssid(event, ssid){
               document.getElementById('step1').style.display = 'none';
               document.getElementById('step2').style.display = 'block';
-              document.getElementById('selected-network').innerText = event.value;
+              document.getElementById('selected-network').innerText = ssid;
+              event.preventDefault();
           }
 
           function back(event){
@@ -118,9 +119,9 @@
                 <h1>Welcome</h1>
                 <h3>Connect to a WiFi network?</h3><br><br>
                 {{#networks}}
-                    <button onclick="selectssid(this)" id="item"
+                    <button onclick="selectssid(event, '{{this}}')" id="item"
                             class="item">Connect to
-                        {{this1}}</button>
+                        {{this}}</button>
                 {{/networks}}<br><br>
                 <input type="submit" class="item skip" id="skip" name="skip"
                        value="Skip"/>
