@@ -1,51 +1,34 @@
-# vaani.setup
+# gateway-wifi-setup
 
-This repo is an Express server that runs on the Vaani device and
+This repo is an Express server that runs on the Moz Gateway device and
 handles the first-time setup required to get the device working:
 
 - since the device is not on the local wifi network when it is first
   turned on, the device broadcasts its own wifi access point and runs
   the server on that. The user then connects their phone or laptop to
   that wifi network and uses a web browser (not a native app!) to
-  connect to the device at the URL `vaani.local`. The user can select
+  connect to the device at the URL `gateway.local`. The user can select
   then their home wifi network and enter the password on a web page
   and transfer it to the web server running on the device. At this
   point, the device can turn off its private network and connect to
   the internet using the credentials the user provided.
 
-- after re-connecting to their home wifi, the user can reload the
-  `vaani.local` page and handle the second part of setup, which is to
-  perform OAuth authentication with Evernote to obtain an access
-  token. (The server saves the token and related values, such as the
-  expiration date, in a file named `oauthToken.json`.)
-
 The code is Linux-specific, depends on systemd, and has so far only
-been tested on a Raspberry Pi 3. It requires hostapd and udhcpd to be
+been tested on a Raspberry Pi 3. It requires hostapd and dnsmasq to be
 installed and properly configured. Here are the steps I followed to
 configure and run this server. Note that the steps include
 instructions for Raspberry Pi and Edison, but that I have not yet been
-able to successfully run on Edison
+able to successfully run on Edison.
 
 ### Step 0: clone and install
 
 First, clone this repo and download its dependencies from npm:
 
 ```
-$ git clone https://github.com/mozilla/vaani.setup.git
-$ cd vaani.setup
+$ git clone https://github.com/mozilla-iot/gateway-wifi-setup
+$ cd gateway-wifi-setup.setup
 $ npm install
 ```
-
-Next, you need to create a config file:
-
-```
-$ cd vaani.setup
-$ cp evernoteConfig.json.template evernoteConfig.json
-```
-
-Edit evernoteConfig.json to add your Evernote API "consumer key" and
-"consumer secret" values. You need to register your app with Evernote
-to get these.
 
 ### Step 1: Edison specific setup
 
@@ -97,14 +80,11 @@ Pi, we need to do:
 
 ```
 $ sudo apt-get install hostapd
-$ sudo apt-get install udhcpd
+$ sudo apt-get install dnsmasq
 $ sudo systemctl disable hostapd
-$ sudo systemctl disable udhcpd
+$ sudo systemctl disable dnsmasq
 ```
 
-On my Edison device, hostapd and udhcpd are already installed and
-disabled (but the udhcpd service is named `udhcpd-for-hostapd`) so
-these steps are not necessary.
 
 ### Step 3: configuration files
 Next, configure the software:
@@ -117,17 +97,12 @@ DAEMON_CONF="/etc/hostapd/hostapd.conf"
 this step is not necessary on Edison.
 
 - Copy `config/hostapd.conf` to `/etc/hostapd/hostapd.conf`.  This
-  config file defines the access point name "Vaani Setup". Edit it if
+  config file defines the access point name "Mozilla IoT Gateway". Edit 
+  it if
   you want to use a different name. On Edison
   `/etc/hostapd/hostapd.conf` alread exists. You may want to rename
   the existing file rather than overwriting it.
 
-- On Raspberry Pi (but not Edison) edit the file `/etc/default/udhcpd`
-  and comment out the line:
-
-```
-DHCPD_ENABLED="no"
-```
 
 - On Edison (but not Raspberry Pi) edit the file
   `/lib/systemd/system/udhcpd-for-hostapd.service` and modify this
@@ -137,40 +112,12 @@ DHCPD_ENABLED="no"
 ExecStartPre=/sbin/ifconfig wlan0 192.168.42.1 up
 ```
 changing `192.168.42.1` to `10.0.0.1`. This is necessary because
-`config/udhcpd.conf` and `wifi.js` use 10.0.0.1 as the local IP
+`config/dnsmasq.conf` and `wifi.js` use 10.0.0.1 as the local IP
 address when we're broadcasting an access point.
 
-- On Raspberry Pi, copy `config/udhcpd.conf` to `/etc/udhcpd.conf`.
-On Edison, rename `/etc/hostapd/udhcpd-for-hostapd.conf` to
-`/etc/hostapd/udhcpd-for-hostapd.conf.orig`, and then copy
-`config/udhcpd.conf` to `/etc/hostapd/udhcpd-for-hostapd.conf`.
+- On Raspberry Pi, copy `config/dnsmasq.conf` to `/etc/dnsmasq.conf`.
 
-### Step 4: set up the other Vaani services
-
-Once the vaani.setup server has connected to wifi and has gotten an
-oauth token, it will start an auto-update service. That auto-update
-service will start the Vaani client software. In order for this all to
-work, you need to have both of these pieces of software installed:
-
-```
-$ git clone https://github.com/andrenatal/git-auto-updater.git
-$ git clone git@github.com:mozilla/vaani.client.git
-```
-
-You'll need to create appropriate systemd .service files for both of
-these and put them in `/lib/systemd/system/vaani.service` and
-`/lib/systemd/system/git-auto-updater.service`.
-
-Importantly, this vaani.setup service stores the OAUTH token in
-an environment variable in
-`/lib/systemd/system/vaani.service.d/evernote.conf`. In order to do
-this, you need to ensure that the directory exists:
-
-```
-$ sudo mkdir /lib/systemd/system/vaani.service.d
-```
-
-### Step 5: run the server
+### Step 4: run the server
 
 If you have a keyboard and monitor hooked up to your device, or have a
 serial connection to the device, then you can try out the server at
@@ -183,28 +130,29 @@ sudo node index.js
 If you want to run the server on a device that has no network
 connection and no keyboard or monitor, you probably want to set it up
 to run automatically when the device boots up. To do this, copy
-`config/vaani-setup.service` to `/lib/systemd/system`, edit it to set
-the correct paths for node and for the server code, and then enable
+`config/mozilla-gateway-wifi-setup.service` to `/lib/systemd/system`, 
+edit it to set the correct paths for node and for the server code, and then 
+enable
 the service with systemd:
 
 ```
-$ sudo cp config/vaani-setup.service /lib/systemd/system
-$ sudo vi /lib/systemd/system/vaani-setup.service # edit paths as needed
-$ sudo systemctl enable vaani-setup
+$ sudo cp config/mozilla-gateway-wifi-setup.service /lib/systemd/system
+$ sudo vi /lib/systemd/system/mozilla-gateway-wifi-setup.service # edit paths as needed
+$ sudo systemctl enable mozilla-gateway-wifi-setup
 ```
 
 At this point, the server will run each time you reboot.  If you want
 to run it manually without rebooting, do this:
 
 ```
-$ sudo systemctl start vaani-setup
+$ sudo systemctl start mozilla-gateway-wifi-setup
 ```
 
 Any output from the server is sent to the systemd journal, and you can
 review it with:
 
 ```
-$ sudo journalctl -u vaani-setup
+$ sudo journalctl -u mozilla-gateway-wifi-setup
 ```
 
 Add the -b option to the line above if you just want to view output
