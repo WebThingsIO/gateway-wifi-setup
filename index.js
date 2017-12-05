@@ -8,6 +8,7 @@ var run = require('./run.js');
 var platform = require('./platform.js');
 var wifi = require('./wifi.js');
 var wait = require('./wait.js');
+var path = require('path');
 
 // The Edison device can't scan for wifi networks while in AP mode, so
 // we've got to scan before we enter AP mode and save the results
@@ -114,7 +115,7 @@ function startServer(wifiStatus) {
   server.get('/wifiSetup', handleWifiSetup);
   server.post('/connecting', handleConnecting);
   server.get('/status', handleStatus);
-
+  server.use(Express.static(path.join(__dirname, 'templates')));
   // And start listening for connections
   // XXX: note that we are HTTP only... is this a security issue?
   // XXX: for first-time this is on an open access point.
