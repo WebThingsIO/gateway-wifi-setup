@@ -62,7 +62,7 @@ function waitForWifi(maxAttempts, interval) {
           if (status === 'COMPLETED') {
             console.log('Wifi connection found. resolving');
             resolve();
-	    console.log('resolved'); 
+	    console.log('resolved');
           }
           else {
             console.log('No wifi connection on attempt', attempts);
@@ -198,8 +198,13 @@ function handleWifiSetup(request, response) {
     // to do the right thing if there are two entries for the same ssid.
     // If not, we could modify wifi.defineNetwork() to overwrite rather than
     // just adding.
+   let map1 = results.filter(x => x.length > 7);
+   map1 = map1.map(word => {
+    let openorclosed = word.substring(3,5).trim() === 'on' ? 'closed' : 'open';
+    return {'pwd': openorclosed, 'ssid':word.substring(6)}
+   });
 
-    response.send(wifiSetupTemplate({ networks: results }));
+    response.send(wifiSetupTemplate({ networks: map1 }));
   });
 }
 
@@ -226,7 +231,7 @@ function handleConnecting(request, response) {
   // /status instead of sending the connecting template.
   //
 
-  response.send(connectingTemplate({ssid: ssid}));
+  //response.send(connectingTemplate({ssid: ssid}));
 
   // Wait before switching networks to make sure the response gets through.
   // And also wait to be sure that the access point is fully down before
@@ -245,7 +250,7 @@ function handleConnecting(request, response) {
     	stopWifiService();
      })
     .catch((error) => {
-	    console.log('General Error:', error);
+	console.log('General Error:', error);
     });
 }
 

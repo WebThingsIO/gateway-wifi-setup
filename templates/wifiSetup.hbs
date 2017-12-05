@@ -92,6 +92,7 @@
               document.getElementById('step1').style.display = 'none';
               document.getElementById('step2').style.display = 'block';
               document.getElementById('selected-network').innerText = ssid;
+              document.getElementById('ssid').value = ssid;
               event.preventDefault();
           }
 
@@ -123,9 +124,8 @@
                 <h1>Welcome</h1>
                 <h3>Connect to a WiFi network?</h3><br><br>
                 {{#networks}}
-                    <button onclick="selectssid(event, '{{this}}')" id="item"
-                            class="item ssid">Connect to
-                        {{this}}</button><br>
+                    <button onclick="selectssid(event, '{{ssid}}')" id="item"
+                            class="item ssid">{{ssid}} ({{pwd}})</button><br>
                 {{/networks}}<br><br>
                 <input type="submit" class="item skip" id="skip" name="skip"
                        value="Skip"/>
@@ -143,6 +143,7 @@
                 <button id="submit" class="item skip">Connect</button>
             </div>
         </div>
+        <input id="ssid" name="ssid" type="hidden" value="">
         <img id="wordmark" alt="Mozilla IoT" src="/moziot-wordmark.png" />
     </form>
   </body>

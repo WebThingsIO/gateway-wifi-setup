@@ -27,14 +27,12 @@ sed -n -e '
   /Quality=/,/ESSID:/H
   /ESSID:/{
     g
-    s/^.*Quality=\\([0-9]\\+\\).*Encryption key:\\([a-z]\\+\\).*ESSID:"\\([^"]*\\)".*$/\\1\\3 \\2/
+    s/^.*Quality=\\([0-9]\\+\\).*Encryption key:\\([a-z]\\+\\).*ESSID:"\\([^"]*\\)".*$/\\1 \\2  \\3/
     p
     s/.*//
     x
   }' |\
-sort -nr |\
-cut -f 2 |\
-sed -e '/^$/d;/\\x00/d'`,
+sort -nr`,
 
   // A shell command that lists the names of known wifi networks, one
   // to a line.
