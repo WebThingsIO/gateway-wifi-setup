@@ -128,7 +128,7 @@ function getTemplate(filename) {
 }
 
 var wifiSetupTemplate = getTemplate('./templates/wifiSetup.hbs');
-//var connectingTemplate = getTemplate('./templates/connecting.hbs');
+var connectingTemplate = getTemplate('./templates/connecting.hbs');
 var statusTemplate = getTemplate('./templates/status.hbs');
 var hotspotTemplate = getTemplate('./templates/hotspot.hbs');
 
@@ -219,6 +219,7 @@ function handleConnecting(request, response) {
     startGateway();
     console.log('stop wifi setup');
     stopWifiService();
+    response.send(connectingTemplate({ssid: ssid}));
     return;
   }
 
@@ -233,8 +234,7 @@ function handleConnecting(request, response) {
   // Also, if we're not in AP mode, then we should just redirect to
   // /status instead of sending the connecting template.
   //
-
-  //response.send(connectingTemplate({ssid: ssid}));
+  response.send(connectingTemplate({ssid: ssid}));
 
   // Wait before switching networks to make sure the response gets through.
   // And also wait to be sure that the access point is fully down before
@@ -247,14 +247,15 @@ function handleConnecting(request, response) {
     .then(() => wifi.defineNetwork(ssid, password))
     .then(() => waitForWifi(20, 3000))
     .then(() => {
-    	console.log('start the gateway');
-    	startGateway();
-    	console.log('stop wifi setup');
-    	stopWifiService();
-     })
-    .catch((error) => {
-	console.log('General Error:', error);
-    });
+     	console.log('start the gateway');
+     	startGateway();
+     	console.log('stop wifi setup');
+     	stopWifiService();
+      })
+     .catch((error) => {
+ 	console.log('General Error:', error);
+     });
+
 }
 
 function handleStatus(request, response) {
