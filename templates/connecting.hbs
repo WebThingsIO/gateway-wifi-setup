@@ -6,10 +6,10 @@
     <link rel="stylesheet" href="style.css" media="screen" charset="utf-8">
     <style>
         body {
-          font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-          background-color: #fff;
-          color: #333;
-          font-size: 100%;
+            background-color: #305067;
+            color: #fff;
+            font-size: 100%;
+            width: auto
         }
         
         @media (max-width:450px) {
@@ -81,20 +81,14 @@
           padding: 0.3em 0;
         }
     </style>
-    <title>Connecting</title>
+    <title>Starting</title>
   </head>
   <body>
-    <h1>Connecting...</h1>
+    <h1>Starting...</h1>
     <p>
-      Vaani is now connecting to the <strong>{{ssid}}</strong> wifi network.
-      Disconnect your phone or computer from the VaaniSetup
+      The gateway is now starting.
+      Disconnect your phone or computer from the Mozilla IoT Gateway
       network and reconnect it to your home wifi.
-    </p><p>
-      When Vaani prompts you, click the
-      button below to continue with setup.
     </p>
-    <button onclick="window.location = window.location.protocol + '//' + window.location.host + '/';">
-      Continue
-    </button>
   </body>
 </html>
