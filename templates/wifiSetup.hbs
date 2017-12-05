@@ -107,6 +107,12 @@
               event.preventDefault();
           }
 
+          function skip(event){
+              event.preventDefault();
+              document.getElementById('skip').value = 1;
+              document.getElementById("mainform").submit();
+          }
+
           var mask = true;
           function displaypassword(){
               let tbx = document.getElementsByName('password')[0];
@@ -123,7 +129,7 @@
     <title>Mozilla Gateway</title>
   </head>
   <body>
-    <form action="/connecting" method="post">
+    <form action="/connecting" method="post" id="mainform">
         <div id="step1">
             <div id="maindiv">
                 <h1>Welcome</h1>
@@ -132,7 +138,8 @@
                     <button onclick="selectssid(event, '{{ssid}}')" id="item"
                             class="item ssid">{{ssid}} ({{pwd}})</button><br>
                 {{/networks}}<br><br>
-                <button class="item skip" id="skip" name="skip">Skip</button>
+                <button onclick="skip(event)" class="item skip" id="skip"
+                        name="skip" value="1">Skip</button>
             </div>
         </div>
         <div id="step2">
