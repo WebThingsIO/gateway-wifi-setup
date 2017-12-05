@@ -15,6 +15,6 @@ run_app() {
 }
 
 cd $HOME/gateway-wifi-setup
-run_app > ${HOME}/wifi-gateway-setup-app.log 2>&1
+run_app > ${HOME}/gateway-wifi-setup-app.log 2>&1
 
 
