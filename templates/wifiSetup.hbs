@@ -143,7 +143,7 @@
             </div>
         </div>
         <div id="step2">
-            <button class="backbtn" onclick="back(event)"></button><br>
+            <input type="button" class="backbtn" onclick="back(event)"><br>
             <div id="maindiv">
                 <h3 id="selected-network">{selected network}</h3><br>
                 <input type="password" name="password" placeholder="WiFi Password"
@@ -151,7 +151,7 @@
                 <input onclick="displaypassword()" id="showpassword"
                        type="checkbox">
                 <label for="showpassword">Show password</label><br><br>
-                <button id="submit" class="item connect">Connect</button>
+                <button id="connect" class="item connect">Connect</button>
             </div>
         </div>
         <input id="ssid" name="ssid" type="hidden" value="">
