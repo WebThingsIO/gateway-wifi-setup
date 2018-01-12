@@ -42,10 +42,10 @@ sort -nr`,
   // The name of the AP is defined in a config file elsewhere
   // Note that we use different commands on Yocto systems than
   // we do on Raspbian systems
-  startAP: 'ifconfig wlan0 10.0.0.1 && systemctl start hostapd && systemctl start dnsmasq',
+  startAP: 'ifconfig wlan0 10.0.0.1; systemctl start hostapd; systemctl start dnsmasq',
 
   // Stop broadcasting an AP and attempt to reconnect to local wifi
-  stopAP: 'systemctl stop hostapd && systemctl stop dnsmasq && ifconfig wlan0 0.0.0.0',
+  stopAP: 'systemctl stop hostapd; systemctl stop dnsmasq; ifconfig wlan0 0.0.0.0',
 
   // Define a new wifi network. Expects the network name and password
   // in the environment variables SSID and PSK.
