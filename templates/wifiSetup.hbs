@@ -136,7 +136,8 @@
                 <h3>Connect to a WiFi network?</h3><br><br>
                 {{#networks}}
                     <button onclick="selectssid(event, '{{ssid}}')" id="item"
-                            class="item ssid">{{ssid}} ({{pwd}})</button><br>
+                            class="item ssid">{{ssid}} <img src='/{{pwd}}'>
+                    </button><br>
                 {{/networks}}<br><br>
                 <button onclick="skip(event)" class="item skip" id="skip"
                         name="skip" value="1">Skip</button>
