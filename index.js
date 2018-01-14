@@ -51,7 +51,21 @@ startServer();
 function waitForWifi(maxAttempts, interval) {
   return new Promise(function(resolve, reject) {
     var attempts = 0;
-    check();
+
+    //first of all we query wpa_supplicant if there's a wifi AP configured
+    run(platform.listNetworks)
+        .then((out) => {
+              console.log('List Networks command executed:', out);
+              if (out.includes('\n0\t')) {
+                  // there's at least one wifi AP configured. Let's wait to see if it will connect
+                  check();
+              } else {
+                  // No wifi AP configured. Let's skip the wait and start the setup immediately
+                  reject();
+              }
+        })
+        .catch((err) => console.error('Error listing Networks:', err));
+
 
     function check() {
       attempts++;
