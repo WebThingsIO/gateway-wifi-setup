@@ -24,22 +24,34 @@ if (fs.existsSync('wifiskip')) {
     return;
 }
 
-// Wait until we have a working wifi connection. Retry every 3 seconds up
-// to 10 times. If we are connected, then start the Gateway client.
-// If we never get a wifi connection, go into AP mode.
-// Before we start, though, let the user know that something is happening
-waitForWifi(20, 3000)
-  .then(() => {
-    console.log('start the gateway');
-    startGateway();
-    console.log('stop wifi setup');
-    stopWifiService();
-  })
-  .catch((err) => {
-	console.log('error starting wifi:', err);
-	startAP();
-	}
-   );
+// check if the device has a wifi adapter.
+// if it doesn't, then this stops itself
+// and start the gateway
+wifi.getStatus()
+    .then(status => {
+        // Wait until we have a working wifi connection. Retry every 3 seconds up
+        // to 10 times. If we are connected, then start the Gateway client.
+        // If we never get a wifi connection, go into AP mode.
+        // Before we start, though, let the user know that something is happening
+        waitForWifi(20, 3000)
+            .then(() => {
+                console.log('start the gateway');
+                startGateway();
+                console.log('stop wifi setup');
+                stopWifiService();
+            })
+            .catch((err) => {
+                console.log('No wifi connection found. Starting the AP...', err);
+                startAP();
+            });
+    })
+    .catch(err => {
+        console.error('Error checking wifi adapter presence. Start the gateway and then shutdown the wifi service..', err);
+        console.log('start the gateway');
+        startGateway();
+        console.log('stop wifi setup');
+        stopWifiService();
+    });
 
 // Meanwhile, start running the server.
 startServer();
