@@ -96,12 +96,14 @@
               document.getElementById('step2').style.display = 'block';
               document.getElementById('selected-network').innerText = ssid;
               document.getElementById('ssid').value = ssid;
+              document.getElementById('wordmark').style.display = 'none';
               event.preventDefault();
           }
 
           function back(event){
               document.getElementById('step1').style.display = 'block';
               document.getElementById('step2').style.display = 'none';
+              document.getElementById('wordmark').style.display = 'block';
               event.preventDefault();
           }
 
