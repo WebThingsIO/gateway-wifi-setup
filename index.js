@@ -138,7 +138,7 @@ function startServer(wifiStatus) {
   // Define the handler methods for the various URLs we handle
   server.get('/*', handleCaptive);
   server.get('/', handleRoot);
-  server.get('/wifiSetup', handleWifiSetup);
+  server.get('/wifi-setup', handleWifiSetup);
   server.post('/connecting', handleConnecting);
   server.get('/status', handleStatus);
   server.use(Express.static(path.join(__dirname, 'templates')));
@@ -175,11 +175,11 @@ function handleCaptive(request, response, next) {
 		console.log('windows captive portal request');
 		response.redirect(302, 'http://10.0.0.1/hotspot.html');
 	} else {
-		response.redirect(302, 'http://10.0.0.1/wifiSetup');
+		response.redirect(302, 'http://10.0.0.1/wifi-setup');
 	}
   } else if (request.path === '/generate_204' || request.path === '/fwlink/') {
 	console.log('android captive portal request');
-        response.redirect(302, 'http://10.0.0.1/wifiSetup');
+        response.redirect(302, 'http://10.0.0.1/wifi-setup');
   } else {
 	console.log('skipping.');
    	next();
@@ -193,7 +193,7 @@ function handleRoot(request, response) {
     // If we don't have a wifi connection yet, display the wifi setup page
     if (status !== 'COMPLETED') {
       console.log("no wifi connection; redirecting to wifiSetup");
-      response.redirect('/wifiSetup');
+      response.redirect('/wifi-setup');
     }
     else {
       // Otherwise, look to see if we have an oauth token yet
