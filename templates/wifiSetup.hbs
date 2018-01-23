@@ -52,6 +52,12 @@
             font-weight: normal;
         }
 
+        label {
+            font-size: 2rem;
+            font-weight: normal;
+            margin-left: 0.8rem;
+        }
+
         html {
             font-size: 10px;
             font-family: 'Open Sans', sans-serif;
@@ -71,7 +77,6 @@
 
         #maindiv2 {
             position: absolute;
-            text-align:center;
             left:50%;
             top:50%;
             transform: translate(-50%, -50%);
@@ -185,6 +190,35 @@
         }
 
 
+        :root .showpassword-checkbox {
+            /* original check box is pushed outside the viewport */
+            position: absolute;
+            left: -1000em;
+        }
+
+        :root .showpassword-checkbox + label:before {
+            content: "";
+            display: inline-block;
+            width  : 3rem;
+            height : 3rem;
+            float: left;
+            margin : 0.1rem 0;
+            background: url("/checkbox-sprite.png") no-repeat 0 0;
+            background-size: 3rem auto;
+        }
+
+        :root .showpassword-checkbox:checked + label:before {
+            background-position: 0 -3rem;
+        }
+
+        :root .showpassword-checkbox:disabled + label:before {
+            background-position: 0 -6rem;
+        }
+
+        :root .showpassword-checkbox:checked:disabled + label:before {
+            background-position: 0 -9rem;
+        }
+
     </style>
     <script>
           function selectssid(event, ssid){
@@ -249,7 +283,7 @@
                 <input type="password" name="password" placeholder="WiFi Password"
                        class="item password"><br>
                 <input onclick="displaypassword()" id="showpassword"
-                       type="checkbox">
+                       type="checkbox" class="showpassword-checkbox">
                 <label for="showpassword">Show password</label><br><br>
                 <button id="connect" class="item connect">Connect</button>
             </div>
