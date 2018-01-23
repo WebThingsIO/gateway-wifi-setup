@@ -69,6 +69,14 @@
             width:100%;
         }
 
+        #maindiv2 {
+            position: absolute;
+            text-align:center;
+            left:50%;
+            top:50%;
+            transform: translate(-50%, -50%);
+        }
+
         #step2 {
             display: none;
             width: 100%;
@@ -237,7 +245,7 @@
                 <div id='div-wifi-icon-2'><img id='img-wifi-icon-2' src='/wifi.svg'></div>
                 <div id='div-wifi-text'><h3 id="selected-network">{selected network}</h3></div>
             </div>
-            <div id="maindiv">
+            <div id="maindiv2">
                 <input type="password" name="password" placeholder="WiFi Password"
                        class="item password"><br>
                 <input onclick="displaypassword()" id="showpassword"
