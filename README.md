@@ -64,7 +64,7 @@ Raspberry pi uses. Commands like these should work:
 ```
 
 By default, my Edison was already running an HTTP server on port 80,
-so this vaani.setup server was not able to run. I disabled the
+so this server was not able to run. I disabled the
 edison_config server like this:
 
 ```

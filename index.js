@@ -123,7 +123,6 @@ function startAP() {
     .then(() => wifi.startAP(platform.ap_ip))                    // start AP mode
     .then(() => {
       console.log('No wifi found; entering AP mode')
-      talkOnFirstPage = true; // continue talking to the user when they connect
     });
 }
 
@@ -140,7 +139,6 @@ function startServer(wifiStatus) {
   server.get('/', handleRoot);
   server.get('/wifi-setup', handleWifiSetup);
   server.post('/connecting', handleConnecting);
-  server.get('/status', handleStatus);
   server.use(Express.static(path.join(__dirname, 'templates')));
   // And start listening for connections
   // XXX: note that we are HTTP only... is this a security issue?
@@ -155,7 +153,6 @@ function getTemplate(filename) {
 
 var wifiSetupTemplate = getTemplate('./templates/wifiSetup.hbs');
 var connectingTemplate = getTemplate('./templates/connecting.hbs');
-var statusTemplate = getTemplate('./templates/status.hbs');
 var hotspotTemplate = getTemplate('./templates/hotspot.hbs');
 
 // When the client issues a GET request for the list of wifi networks
