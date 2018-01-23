@@ -116,10 +116,12 @@
         .item.ssid {
           height: 50px;
           margin-bottom: 10px;
+          text-align: left;
         }
 
         .item.password{
-            height: 40px;
+          height: 40px;
+          text-align: left;
         }
         .item:hover,
         .item:focus,
@@ -138,6 +140,16 @@
             bottom: 2rem;
             left: 2rem;
             width: 7rem;
+        }
+
+        #wifi-icon {
+            float: right;
+        }
+
+        #text-ssid {
+            float: left;
+            padding: 5px 0px 0px 10px;
+            font-size: large;
         }
 
     </style>
@@ -187,7 +199,7 @@
                 <h3>Connect to a WiFi network?</h3><br><br>
                 {{#networks}}
                     <button onclick="selectssid(event, '{{ssid}}')" id="item"
-                            class="item ssid">{{ssid}} <img src='/{{pwd}}'>
+                            class="item ssid"><div id="text-ssid">{{ssid}}</div> <img id='wifi-icon' src='/{{pwd}}'>
                     </button>
                 {{/networks}}<br><br>
                 <button onclick="skip(event)" class="item skip" id="skip"
