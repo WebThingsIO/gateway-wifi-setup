@@ -43,21 +43,23 @@
         }
 
         h1 {
-            font-size: 60px;
+            font-size: 5rem;
             font-family: 'Zilla Slab', sans-serif;
-            padding: 2rem;
+        }
+
+        h3 {
+            font-size: 2rem;
+            font-weight: normal;
         }
 
         html {
-            font-size: 20px;
+            font-size: 10px;
             font-family: 'Open Sans', sans-serif;
-            padding: 2rem;
         }
 
         body {
             background-color: #305067;
             color: #fff;
-            font-size: 100%;
             width: auto
         }
 
@@ -69,57 +71,52 @@
 
         #step2 {
             display: none;
-        }
-
-        #step2 {
             width: 100%;
         }
 
         .backbtn {
-            margin: 20 20 auto;
+            margin: 2rem 2rem auto;
             position: relative;
-            width: 64px;
-            height: 64px;
+            width: 8rem;
+            height: 8rem;
             background-image: url('/back.png');
             background-repeat: no-repeat;
             background-color: #305067;
-            background-size: 64px 64px;
+            background-size: 8rem 8rem;
             border: none;
         }
 
         .item {
           display: block;
           margin: 0 auto;
-          padding: 8px;
+          padding: 0.8rem;
           width: 100%;
           border: none;
-          max-width: 400px;
+          max-width: 40rem;
           background: rgba(255, 255, 255, 0.3);
-          border-radius: 8px;
+          border-radius: 0.5rem;
           color: #fff;
           text-align: center;
           text-decoration: none;
-          letter-spacing: 1px;
+          letter-spacing: 0.1rem;
         }
 
         .item.skip {
-          width: 15%;
-          max-width: 200px;
+          width: 10rem;
         }
 
         .item.connect {
-          width: 25%;
-          max-width: 200px;
+          width: 10rem;
         }
 
         .item.ssid {
-          height: 50px;
-          margin-bottom: 10px;
+          height: 5rem;
+          margin-bottom: 1rem;
           text-align: left;
         }
 
         .item.password{
-          height: 40px;
+          height: 4rem;
           text-align: left;
           background-color: #c7d0d6;
           color: #666666;
@@ -140,7 +137,7 @@
             position: fixed;
             bottom: 2rem;
             left: 2rem;
-            width: 7rem;
+            width: 12.5rem;
         }
 
         #wifi-icon {
@@ -149,7 +146,7 @@
 
         #text-ssid {
             float: left;
-            padding: 5px 0px 0px 10px;
+            padding: .5rem 0 0 1rem;
             font-size: large;
         }
 
@@ -197,7 +194,7 @@
         <div id="step1">
             <div id="maindiv">
                 <h1>Welcome</h1>
-                <h3>Connect to a WiFi network?</h3><br><br>
+                <h3>Connect to a WiFi network?</h3><br>
                 {{#networks}}
                     <button onclick="selectssid(event, '{{ssid}}')" id="item"
                             class="item ssid"><div id="text-ssid">{{ssid}}</div> <img id='wifi-icon' src='/{{pwd}}'>
