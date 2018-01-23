@@ -150,6 +150,33 @@
             font-size: large;
         }
 
+        #div-wifi-icon-2{
+            float: left;
+            height: 100%;
+            display: inline-block;
+        }
+
+        #img-wifi-icon-2 {
+            padding-top: 2rem;
+        }
+
+        #network-label {
+            top: 5rem;
+            left: 50%;
+            position: absolute;
+            display: inline-block;
+            height: 7rem;
+            transform: translate(-50%, -50%);
+        }
+
+        #div-wifi-text {
+            float: right;
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 1rem;
+        }
+
+
     </style>
     <script>
           function selectssid(event, ssid){
@@ -205,9 +232,12 @@
             </div>
         </div>
         <div id="step2">
-            <input type="button" class="backbtn" onclick="back(event)"><br>
+            <input type="button" class="backbtn" onclick="back(event)">
+            <div id='network-label'>
+                <div id='div-wifi-icon-2'><img id='img-wifi-icon-2' src='/wifi.svg'></div>
+                <div id='div-wifi-text'><h3 id="selected-network">{selected network}</h3></div>
+            </div>
             <div id="maindiv">
-                <h3 id="selected-network">{selected network}</h3><br>
                 <input type="password" name="password" placeholder="WiFi Password"
                        class="item password"><br>
                 <input onclick="displaypassword()" id="showpassword"
