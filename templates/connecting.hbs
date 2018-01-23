@@ -3,92 +3,85 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1"/>
     <meta charset="utf-8"/>
-    <link rel="stylesheet" href="style.css" media="screen" charset="utf-8">
     <style>
+
+        @font-face {
+            font-family: 'Zilla Slab';
+            font-weight: 400;
+            font-style: normal;
+            src: url("/fonts/ZillaSlab-Regular.woff2") format("woff2"), url("/fonts/ZillaSlab-Regular.woff") format("woff");
+        }
+        @font-face {
+            font-family: 'Zilla Slab';
+            font-weight: 700;
+            font-style: normal;
+            src: url("/fonts/ZillaSlab-Bold.woff2") format("woff2"), url("/fonts/ZillaSlab-Bold.woff") format("woff");
+        }
+        @font-face {
+            font-family: 'Zilla Slab';
+            font-weight: 400;
+            font-style: italic;
+            src: url("/fonts/ZillaSlab-RegularItalic.woff2") format("woff2"), url("/fonts/ZillaSlab-RegularItalic.woff") format("woff");
+        }
+        @font-face {
+            font-family: 'Zilla Slab';
+            font-weight: 700;
+            font-style: italic;
+            src: url("/fonts/ZillaSlab-BoldItalic.woff2") format("woff2"), url("/fonts/ZillaSlab-BoldItalic.woff") format("woff");
+        }
+        @font-face {
+            font-family: 'Open Sans';
+            font-weight: 400;
+            font-style: normal;
+            src: url("/fonts/opensans-regular.woff2") format("woff2"), url("/fonts/opensans-regular.woff") format("woff");
+        }
+        @font-face {
+            font-family: 'Open Sans';
+            font-weight: 700;
+            font-style: normal;
+            src: url("/fonts/opensans-bold.woff2") format("woff2"), url("/fonts/opensans-bold.woff") format("woff");
+        }
+
+        h1 {
+            font-size: 5rem;
+            font-family: 'Zilla Slab', sans-serif;
+        }
+
+        h3 {
+            font-size: 1.6rem;
+            font-weight: normal;
+        }
+
+        html {
+            font-size: 10px;
+            font-family: 'Open Sans', sans-serif;
+        }
+
         body {
             background-color: #305067;
             color: #fff;
-            font-size: 100%;
             width: auto
         }
-        
-        @media (max-width:450px) {
-          body {
-            font-size: 80%;
-          }
+
+        #maindiv {
+            position: absolute;
+            text-align:center;
+            left:50%;
+            top:50%;
+            transform: translate(-50%, -50%);
         }
-        
-        h1, h2, p, button, select, input, table {
-          display: block;
-          width: 90%;
-          max-width: 450px;
-          margin: 0 auto;
-        }
-        
-        h1 {
-          font-size: 4em;
-          margin-top: 1.5em;
-          margin-bottom: 1em;
-        }
-        
-        p {
-          font-size: 1.5em;
-          margin: 1em auto;
-        }
-        
-        button {
-          margin: 2em auto;
-          font-family: inherit;
-          font-size: 2em;
-          font-weight: bold;
-          color: #eee;
-          background-color: #333;
-          border: none;
-          padding: 0.3em 1em;
-          border-radius: 2px;
-        }
-        
-        button:active {
-          background-color: #666;
-        }
-        
-        select, input {
-          margin: 1em auto;
-          font-size: 1.5em;
-          font-family: inherit;
-          border: 2px solid #333;
-          border-radius: 2px;
-          padding: 0.3em;
-        }
-        
-        table {
-          margin: 1em auto;
-          font-size: 1.5em;
-        }
-        
-        th {
-          text-align: left;
-          min-width: 50%
-        }
-        
-        td {
-          text-align: right;
-          vertical-align: bottom;
-        }
-        
-        td, th {
-          border-bottom: 2px solid #333;
-          padding: 0.3em 0;
-        }
+
     </style>
-    <title>Starting</title>
+    <title>Connecting</title>
   </head>
   <body>
-    <h1>Starting...</h1>
-    <p>
-      The gateway is now starting.
-      Disconnect your phone or computer from the Mozilla IoT Gateway
-      network and reconnect it to your home wifi.
-    </p>
+    <div id="maindiv">
+        <h1>Connecting...</h1>
+        <h3>
+          The gateway is now connecting to your WiFi network. <br><br>
+          Please ensure you are connected to that network and navigate
+          to gateway.local in your web browser to continue setup.
+        </h3>
+    </div>
   </body>
 </html>
