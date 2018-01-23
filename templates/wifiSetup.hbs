@@ -115,6 +115,7 @@
 
         .item.ssid {
           height: 50px;
+          margin-bottom: 10px;
         }
 
         .item.password{
@@ -187,7 +188,7 @@
                 {{#networks}}
                     <button onclick="selectssid(event, '{{ssid}}')" id="item"
                             class="item ssid">{{ssid}} <img src='/{{pwd}}'>
-                    </button><br>
+                    </button>
                 {{/networks}}<br><br>
                 <button onclick="skip(event)" class="item skip" id="skip"
                         name="skip" value="1">Skip</button>
