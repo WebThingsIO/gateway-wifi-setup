@@ -249,7 +249,7 @@ function handleConnecting(request, response) {
             console.log('stop wifi setup');
             stopWifiService();
         });
-    response.send(connectingTemplate({ssid: ssid}));
+    response.send(connectingTemplate({skip: 'true'}));
     return;
   }
 
@@ -264,7 +264,7 @@ function handleConnecting(request, response) {
   // Also, if we're not in AP mode, then we should just redirect to
   // /status instead of sending the connecting template.
   //
-  response.send(connectingTemplate({ssid: ssid}));
+  response.send(connectingTemplate({skip: 'false'}));
 
   // Wait before switching networks to make sure the response gets through.
   // And also wait to be sure that the access point is fully down before

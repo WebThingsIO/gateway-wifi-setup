@@ -76,12 +76,20 @@
   </head>
   <body>
     <div id="maindiv">
-        <h1>Connecting...</h1>
-        <h3>
+        <h1 id="title">Connecting...</h1>
+        <h3 id="content">
           The gateway is now connecting to your WiFi network. <br><br>
           Please ensure you are connected to that network and navigate
           to gateway.local in your web browser to continue setup.
         </h3>
     </div>
+    <script>
+        if ({{skip}}) {
+            document.getElementById('title').innerHTML = "WiFi setup skipped";
+            document.getElementById('content').innerHTML = "The gateway is now being started. " +
+                    "Navigate to gateway.local in your web browser while connected to same network as the gateway " +
+                    "to continue setup.";
+        }
+    </script>
   </body>
 </html>
