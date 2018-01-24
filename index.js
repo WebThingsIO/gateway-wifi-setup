@@ -120,7 +120,7 @@ function startAP() {
   // the AP is being broadcast
   wifi.scan(10)   // retry up to 10 times
     .then(ssids => preliminaryScanResults = ssids) // remember the networks
-    .then(() => wifi.startAP())                    // start AP mode
+    .then(() => wifi.startAP(platform.ap_ip))                    // start AP mode
     .then(() => {
       console.log('No wifi found; entering AP mode')
       talkOnFirstPage = true; // continue talking to the user when they connect
@@ -166,20 +166,20 @@ function handleCaptive(request, response, next) {
   console.log('handleCaptive', request.path);
   if (request.path === '/hotspot.html') {
 	console.log('sending hotspot.html');
-	response.send(hotspotTemplate());
+	response.send(hotspotTemplate({ap_ip: platform.ap_ip}));
   } else if (request.path === '/hotspot-detect.html' ||
 	    request.path === '/connecttest.txt') {
 	console.log('ios or osx captive portal request', request.path);
 	if (request.get('User-Agent').includes('CaptiveNetworkSupport') ||
 	  request.get('User-Agent').includes('Microsoft NCSI')) {
 		console.log('windows captive portal request');
-		response.redirect(302, 'http://10.0.0.1/hotspot.html');
+        response.redirect(302, 'http://' + platform.ap_ip + '/hotspot.html');
 	} else {
-		response.redirect(302, 'http://10.0.0.1/wifi-setup');
+		response.redirect(302, 'http://' + platform.ap_ip + '/wifi-setup');
 	}
   } else if (request.path === '/generate_204' || request.path === '/fwlink/') {
-	console.log('android captive portal request');
-        response.redirect(302, 'http://10.0.0.1/wifi-setup');
+    console.log('android captive portal request');
+    response.redirect(302, 'http://' + platform.ap_ip + '/wifi-setup');
   } else {
 	console.log('skipping.');
    	next();

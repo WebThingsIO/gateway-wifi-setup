@@ -1,6 +1,9 @@
 module.exports = {
   platform: "default",
 
+  // ip to be used by the AP
+  ap_ip: '192.168.220.1',
+
 //  startVaani: 'systemctl start vaani && systemctl start git-auto-updater',
 //  stopGateway: 'systemctl stop Gateway && systemctl stop git-auto-updater',
 //  restartGateway: 'systemctl restart Gateway && systemctl restart git-auto-updater',
@@ -42,7 +45,7 @@ sort -nr`,
   // The name of the AP is defined in a config file elsewhere
   // Note that we use different commands on Yocto systems than
   // we do on Raspbian systems
-  startAP: 'ifconfig wlan0 10.0.0.1; systemctl start hostapd; systemctl start dnsmasq',
+  startAP: 'ifconfig wlan0 $IP; systemctl start hostapd; systemctl start dnsmasq',
 
   // Stop broadcasting an AP and attempt to reconnect to local wifi
   stopAP: 'systemctl stop hostapd; systemctl stop dnsmasq; ifconfig wlan0 0.0.0.0',

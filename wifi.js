@@ -86,8 +86,8 @@ function scan(numAttempts) {
  * enabled, so that they do not automatically run when the device boots up.
  * It also requires that hostapd and udhcpd have appropriate config files
  * that define the ssid for the wifi network to be created, for example.
- * Also, the udhcpd config file should be set up to work with 10.0.0.1 as
- * the IP address of the device.
+ * Also, the udhcpd config file should be set up to work with the IP address
+ * of the device.
  *
  * XXX
  * It would probably be better if the IP address, SSID and password were
@@ -102,8 +102,8 @@ function scan(numAttempts) {
  * seconds to complete before the user will be able to see and connect
  * to the network.
  */
-function startAP() {
-  return run(platform.startAP);
+function startAP(ip) {
+  return run(platform.startAP, {IP: ip});
 }
 
 /*

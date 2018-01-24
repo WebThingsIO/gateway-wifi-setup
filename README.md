@@ -111,9 +111,10 @@ this step is not necessary on Edison.
 ```
 ExecStartPre=/sbin/ifconfig wlan0 192.168.42.1 up
 ```
-changing `192.168.42.1` to `10.0.0.1`. This is necessary because
-`config/dnsmasq.conf` and `wifi.js` use 10.0.0.1 as the local IP
-address when we're broadcasting an access point.
+changing `192.168.42.1` to `192.168.220.1`. This is necessary because
+`config/dnsmasq.conf` and `wifi.js` use 192.168.220.1 as the local IP
+address when we're broadcasting an access point. This ip should match the one set
+on `platforms/default.js` at variable `ap_ip`.
 
 - On Raspberry Pi, copy `config/dnsmasq.conf` to `/etc/dnsmasq.conf`.
 
