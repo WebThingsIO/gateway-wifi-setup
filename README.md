@@ -20,6 +20,9 @@ configure and run this server. Note that the steps include
 instructions for Raspberry Pi and Edison, but that I have not yet been
 able to successfully run on Edison.
 
+If you intend to modify this code and need to test your changes in a real device, please refer
+to: https://github.com/mozilla-iot/gateway-wifi-setup/wiki/Testing-on-WoT-Base-Image
+
 ### Step 0: clone and install
 
 First, clone this repo and download its dependencies from npm:
