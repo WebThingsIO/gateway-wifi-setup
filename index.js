@@ -180,6 +180,9 @@ function handleCaptive(request, response, next) {
   } else if (request.path === '/generate_204' || request.path === '/fwlink/') {
     console.log('android captive portal request');
     response.redirect(302, 'http://' + platform.ap_ip + '/wifi-setup');
+  } else if (request.path === '/redirect') {
+    console.log('redirect - send setup for windows');
+    response.redirect(302, 'http://' + platform.ap_ip + '/wifi-setup');
   } else {
 	console.log('skipping.');
    	next();
