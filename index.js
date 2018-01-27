@@ -46,7 +46,7 @@ wifi.getStatus()
             });
     })
     .catch(err => {
-        console.error('Error checking wifi adapter presence. Start the gateway and then shutdown the wifi service..', err);
+        console.error('Error checking wifi adapter presence. Start the gateway and then shutdown the wifi service..');
         console.log('start the gateway');
         startGateway();
         console.log('stop wifi setup');
