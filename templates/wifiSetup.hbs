@@ -43,7 +43,7 @@
         }
 
         h1 {
-            font-size: 5rem;
+            font-size: 3rem;
             font-family: 'Zilla Slab', sans-serif;
         }
 
@@ -90,12 +90,12 @@
         .backbtn {
             margin: 2rem 2rem auto;
             position: relative;
-            width: 8rem;
-            height: 8rem;
+            width: 6.4rem;
+            height: 6.4rem;
             background-image: url('/back.png');
             background-repeat: no-repeat;
             background-color: #305067;
-            background-size: 8rem 8rem;
+            background-size: 6.4rem 6.4rem;
             border: none;
         }
 
@@ -106,7 +106,7 @@
           width: 100%;
           border: none;
           max-width: 40rem;
-          background: rgb(111, 133, 149);
+          background: #597285;
           border-radius: 0.5rem;
           color: #fff;
           text-align: center;
@@ -133,11 +133,23 @@
           background-color: #c7d0d6;
           color: #666666;
         }
+
         .item:hover,
         .item:focus,
         .item:active {
           background: #748ea1;
+          color: #fff;
+        }
+
+        .item.password:hover,
+        .item.password:focus,
+        .item.password:active {
+          background-color: #c7d0d6;
           color: #000;
+        }
+
+        .item.password::placeholder {
+          color: #666;
         }
 
         .item:focus {
