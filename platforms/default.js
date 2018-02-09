@@ -1,3 +1,5 @@
+const path = require('path');
+
 module.exports = {
   platform: "default",
 
@@ -18,19 +20,9 @@ module.exports = {
   getConnectedNetwork:
     "wpa_cli -iwlan0 status | sed -n -e '/^ssid=/{s/ssid=//;p;q}'",
 
-  // A shell command that scans for wifi networks and outputs the ssids in
+  // A Python script that scans for wifi networks and outputs the ssids in
   // order from best signal to worst signal, omitting hidden networks
-  scan: `iwlist wlan0 scan |\
-sed -n -e '
-  /Quality=/,/ESSID:/H
-  /ESSID:/{
-    g
-    s/^.*Quality=\\([0-9]\\+\\).*Encryption key:\\([a-z]\\+\\).*ESSID:"\\([^"]*\\)".*$/\\1 \\2  \\3/
-    p
-    s/.*//
-    x
-  }' |\
-sort -nr`,
+  scan: path.join(__dirname, 'scan.py'),
 
   // A shell command that lists the names of known wifi networks, one
   // to a line.

@@ -172,6 +172,10 @@
             float: left;
             padding: .5rem 0 0 1rem;
             font-size: large;
+            width: 32rem;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
         }
 
         #div-wifi-icon-2{
@@ -276,7 +280,7 @@
                 <h1>Welcome</h1>
                 <h3>Connect to a WiFi network?</h3><br>
                 {{#networks}}
-                    <button onclick="selectssid(event, '{{ssid}}')" id="item"
+                    <button onclick="selectssid(event, '{{{escapeQuotes ssid}}}')" id="item"
                             class="item ssid"><div id="text-ssid">{{ssid}}</div> <img id='wifi-icon' src='/{{pwd}}'>
                     </button>
                 {{/networks}}<br><br>

@@ -10,6 +10,10 @@ var wifi = require('./wifi.js');
 var wait = require('./wait.js');
 var path = require('path');
 
+Handlebars.registerHelper('escapeQuotes', function(str) {
+  return new Handlebars.SafeString(str.replace(/'/, "\\'"));
+});
+
 // The Edison device can't scan for wifi networks while in AP mode, so
 // we've got to scan before we enter AP mode and save the results
 var preliminaryScanResults;
