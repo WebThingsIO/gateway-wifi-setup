@@ -47,4 +47,7 @@ module.exports = {
 
   // Lists configured networks
   listNetworks: "wpa_cli -iwlan0 list_networks",
+
+  // Broadcast an Eddystone beacon
+  broadcastBeacon: 'hciconfig hci0 up && hciconfig hci0 leadv 3 && hcitool -i hci0 cmd',
 }

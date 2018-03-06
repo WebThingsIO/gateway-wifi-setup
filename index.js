@@ -254,6 +254,7 @@ function handleConnecting(request, response) {
             stopWifiService();
         });
     response.send(connectingTemplate({skip: 'true'}));
+    wifi.broadcastBeacon();
     return;
   }
 
@@ -280,6 +281,7 @@ function handleConnecting(request, response) {
     .then(() => wait(5000))
     .then(() => wifi.defineNetwork(ssid, password))
     .then(() => waitForWifi(20, 3000))
+    .then(() => wifi.broadcastBeacon())
     .then(() => {
      	console.log('start the gateway');
      	startGateway();
