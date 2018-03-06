@@ -280,16 +280,16 @@
                 <h1>Welcome</h1>
                 <h3>Connect to a WiFi network?</h3><br>
                 {{#networks}}
-                    <button onclick="selectssid(event, '{{{escapeQuotes ssid}}}')" id="item"
+                    <button onclick="window.selectssid(event, '{{{escapeQuotes ssid}}}')" id="item"
                             class="item ssid"><div id="text-ssid">{{ssid}}</div> <img id='wifi-icon' src='/{{pwd}}'>
                     </button>
                 {{/networks}}<br><br>
-                <button onclick="skip(event)" class="item skip" id="skip"
+                <button onclick="window.skip(event)" class="item skip" id="skip"
                         name="skip" value="1">Skip</button>
             </div>
         </div>
         <div id="step2">
-            <input type="button" class="backbtn" onclick="back(event)">
+            <input type="button" class="backbtn" onclick="window.back(event)">
             <div id='network-label'>
                 <div id='div-wifi-icon-2'><img id='img-wifi-icon-2' src='/wifi.svg'></div>
                 <div id='div-wifi-text'><h3 id="selected-network">{selected network}</h3></div>
@@ -297,7 +297,7 @@
             <div id="maindiv2">
                 <input type="password" name="password" placeholder="WiFi Password"
                        class="item password"><br>
-                <input onclick="displaypassword()" id="showpassword"
+                <input onclick="window.displaypassword()" id="showpassword"
                        type="checkbox" class="showpassword-checkbox">
                 <label for="showpassword">Show password</label><br><br>
                 <button id="connect" class="item connect">Connect</button>
