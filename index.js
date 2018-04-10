@@ -279,6 +279,18 @@ function handleConnecting(request, response) {
   wait(2000)
     .then(() => wifi.stopAP())
     .then(() => wait(5000))
+    .then(() => wifi.getKnownNetworks())
+    .then((networks) => {
+      const index = networks.indexOf(ssid);
+      if (index >= 0) {
+        // Remove the existing network. We should be able to update this with
+        // `wpa_cli -iwlan0 new_password <id> "<psk>"`, but that doesn't seem
+        // to actually work.
+        return wifi.removeNetwork(index);
+      } else {
+        return Promise.resolve();
+      }
+    })
     .then(() => wifi.defineNetwork(ssid, password))
     .then(() => waitForWifi(20, 3000))
     .then(() => wifi.broadcastBeacon())

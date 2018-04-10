@@ -1,6 +1,6 @@
 const os = require('os');
-var run = require('./run.js');
-var platform = require('./platform.js');
+const run = require('./run.js');
+const platform = require('./platform.js');
 
 exports.getStatus = getStatus;
 exports.getConnectedNetwork = getConnectedNetwork;
@@ -8,10 +8,11 @@ exports.scan = scan;
 exports.startAP = startAP;
 exports.stopAP = stopAP;
 exports.defineNetwork = defineNetwork;
+exports.removeNetwork = removeNetwork;
 exports.getKnownNetworks = getKnownNetworks;
 exports.broadcastBeacon = broadcastBeacon;
 
-/*
+/**
  * Determine whether we have a wifi connection with the `wpa_cli
  * status` command. This function returns a Promise that resolves to a
  * string.  On my Rasberry Pi, the string is "DISCONNECTED" or
@@ -23,7 +24,7 @@ function getStatus() {
   return run(platform.getStatus);
 }
 
-/*
+/**
  * Determine the ssid of the wifi network we are connected to.
  * This function returns a Promise that resolves to a string. 
  * The string will be empty if not connected.
@@ -32,7 +33,7 @@ function getConnectedNetwork() {
   return run(platform.getConnectedNetwork);
 }
 
-/*
+/**
  * Scan for available wifi networks using `iwlist wlan0 scan`.
  * Returns a Promise that resolves to an array of strings. Each string
  * is the ssid of a wifi network. They are sorted by signal strength from
@@ -49,7 +50,7 @@ function getConnectedNetwork() {
 function scan(numAttempts) {
   numAttempts = numAttempts || 1;
   return new Promise(function(resolve, reject) {
-    var attempts = 0;
+    let attempts = 0;
 
     function tryScan() {
       attempts++;
@@ -79,7 +80,7 @@ function scan(numAttempts) {
   }
 }
 
-/*
+/**
  * Enable an access point that users can connect to to configure the device.
  *
  * This command runs different commands on Raspbery Pi Rasbian and Edison Yocto.
@@ -108,7 +109,7 @@ function startAP(ip) {
   return run(platform.startAP, {IP: ip});
 }
 
-/*
+/**
  * Like startAP(), but take the access point down, using platform-dependent
  * commands.
  *
@@ -120,7 +121,7 @@ function stopAP() {
   return run(platform.stopAP);
 }
 
-/*
+/**
  * This function uses wpa_cli to add the specified network ssid and password
  * to the wpa_supplicant.conf file. This assumes that wpa_supplicant is
  * configured to run automatically at boot time and is configured to work
@@ -136,7 +137,14 @@ function defineNetwork(ssid, password) {
   });
 }
 
-/*
+/**
+ * This function uses wpa_cli to remove the network with the given ID.
+ */
+function removeNetwork(id) {
+  return run(platform.removeNetwork, {ID: id});
+}
+
+/**
  * Return a Promise that resolves to an array of known wifi network names
  */
 function getKnownNetworks() {
@@ -144,6 +152,9 @@ function getKnownNetworks() {
     .then(out => out.length ? out.split('\n') : []);
 }
 
+/**
+ * Broadcast a Bluetooth Eddystone beacon with the local IP address.
+ */
 function broadcastBeacon() {
   let cmd = platform.broadcastBeacon;
 

@@ -26,7 +26,7 @@ module.exports = {
 
   // A shell command that lists the names of known wifi networks, one
   // to a line.
-  getKnownNetworks: "wpa_cli -iwlan0 list_networks | sed -e '1d' | cut -f 2",
+  getKnownNetworks: 'wpa_cli -iwlan0 list_networks | sed -e "1d" | awk \'BEGIN {FS="\\t"}; {print $2}\'',
 
   // Start broadcasting an access point.
   // The name of the AP is defined in a config file elsewhere
@@ -36,6 +36,10 @@ module.exports = {
 
   // Stop broadcasting an AP and attempt to reconnect to local wifi
   stopAP: 'systemctl stop hostapd; systemctl stop dnsmasq; ifconfig wlan0 0.0.0.0',
+
+  // Remove an existing network. Expects the network ID in the environment
+  // variable ID.
+  removeNetwork: 'wpa_cli -iwlan0 remove_network $ID && wpa_cli -iwlan0 save_config',
 
   // Define a new wifi network. Expects the network name and password
   // in the environment variables SSID and PSK.
