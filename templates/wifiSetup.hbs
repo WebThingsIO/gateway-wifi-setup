@@ -236,7 +236,7 @@
 
     </style>
     <script>
-          function selectssid(event, ssid){
+          function selectssid(event, ssid) {
               document.getElementById('step1').style.display = 'none';
               document.getElementById('step2').style.display = 'block';
               document.getElementById('selected-network').innerText = ssid;
@@ -245,31 +245,30 @@
               event.preventDefault();
           }
 
-          function back(event){
+          function back(event) {
               document.getElementById('step1').style.display = 'block';
               document.getElementById('step2').style.display = 'none';
               document.getElementById('wordmark').style.display = 'block';
               event.preventDefault();
           }
 
-          function skip(event){
+          function skip(event) {
               event.preventDefault();
-              document.getElementById('skip').value = 1;
-              document.getElementById("mainform").submit();
+              document.getElementById('skip').value = '1';
+              document.getElementById('mainform').submit();
           }
 
           var mask = true;
-          function displaypassword(){
+          function displaypassword() {
               let tbx = document.getElementsByName('password')[0];
               if(mask === true){
                 mask = false;
-                tbx.setAttribute("type", "text");
+                tbx.setAttribute('type', 'text');
               } else {
                 mask = true;
-                tbx.setAttribute("type", "password");
+                tbx.setAttribute('type', 'password');
               }
-          };
-
+          }
     </script>
     <title>Mozilla Gateway</title>
   </head>
@@ -284,8 +283,7 @@
                             class="item ssid"><div id="text-ssid">{{ssid}}</div> <img id='wifi-icon' src='/{{pwd}}'>
                     </button>
                 {{/networks}}<br><br>
-                <button onclick="window.skip(event)" class="item skip" id="skip"
-                        name="skip" value="1">Skip</button>
+                <button onclick="window.skip(event)" class="item skip">Skip</button>
             </div>
         </div>
         <div id="step2">
@@ -304,6 +302,7 @@
             </div>
         </div>
         <input id="ssid" name="ssid" type="hidden" value="">
+        <input id="skip" name="skip" type="hidden" value="">
         <img id="wordmark" alt="Mozilla IoT" src="/moziot-wordmark.png" />
     </form>
   </body>
