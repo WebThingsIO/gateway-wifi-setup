@@ -4,6 +4,7 @@ var Express = require('express');
 var Handlebars = require('handlebars');
 var bodyParser = require('body-parser');
 var fs = require('fs');
+var os = require('os');
 var run = require('./run.js');
 var platform = require('./platform.js');
 var wifi = require('./wifi.js');
@@ -91,7 +92,7 @@ function waitForWifi(maxAttempts, interval) {
           console.log(status);
           if (status === 'COMPLETED') {
             console.log('Wifi connection found. resolving');
-            resolve();
+            checkForAddress();
             console.log('resolved');
           }
           else {
@@ -103,6 +104,23 @@ function waitForWifi(maxAttempts, interval) {
           console.error('Error checking wifi on attempt', attempts, ':', err);
           retryOrGiveUp();
         });
+    }
+
+    function checkForAddress() {
+      const ifaces = os.networkInterfaces();
+
+      if (ifaces.hasOwnProperty('wlan0')) {
+        for (const addr of ifaces['wlan0']) {
+          if (addr.family !== 'IPv4' || addr.internal) {
+            continue;
+          }
+
+          resolve();
+          return;
+        }
+      }
+
+      retryOrGiveUp();
     }
 
     function retryOrGiveUp() {
@@ -131,9 +149,8 @@ function startAP() {
 }
 
 function startServer(wifiStatus) {
-
-   // The express server
-   var server = Express();
+  // The express server
+  var server = Express();
 
   // When we get POSTs, handle the body like this
   server.use(bodyParser.urlencoded({extended:false}));
@@ -242,19 +259,18 @@ function handleWifiSetup(request, response) {
 }
 
 function handleConnecting(request, response) {
-
   if (request.body.skip === '1') {
     fs.closeSync(fs.openSync('wifiskip', 'w'));
     console.log('skip wifi setup. stop the ap');
-    wifi.stopAP()
-        .then(() =>{
-            console.log('skip wifi setup. start the gateway');
-            startGateway();
-            console.log('stop wifi setup');
-            stopWifiService();
-        });
     response.send(connectingTemplate({skip: 'true'}));
-    wifi.broadcastBeacon();
+    wifi.stopAP()
+      .then(() => wifi.broadcastBeacon())
+      .then(() =>{
+        console.log('skip wifi setup. start the gateway');
+        startGateway();
+        console.log('stop wifi setup');
+        stopWifiService();
+      });
     return;
   }
 
@@ -295,15 +311,14 @@ function handleConnecting(request, response) {
     .then(() => waitForWifi(20, 3000))
     .then(() => wifi.broadcastBeacon())
     .then(() => {
-     	console.log('start the gateway');
-     	startGateway();
-     	console.log('stop wifi setup');
-     	stopWifiService();
-      })
-     .catch((error) => {
- 	console.log('General Error:', error);
-     });
-
+      console.log('start the gateway');
+      startGateway();
+      console.log('stop wifi setup');
+      stopWifiService();
+    })
+    .catch((error) => {
+ 	  console.log('General Error:', error);
+    });
 }
 
 function handleStatus(request, response) {
