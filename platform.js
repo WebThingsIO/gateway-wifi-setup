@@ -1,3 +1,4 @@
+/* eslint-disable */
 /*
  * # Raspberry Pi (we'll treat this as the default)
  * pi@gateway:~ $ uname -a
@@ -5,9 +6,11 @@
  *
  */
 
-var uname =
-    require('child_process').execFileSync('uname', ['-a'], { encoding:'utf8' })
+const uname =
+    require('child_process').execFileSync('uname', ['-a'], {encoding: 'utf8'});
 
-var platform = require('./platforms/default.js');
+/* eslint-enable */
+
+const platform = require('./platforms/default.js');
 
 module.exports = platform;

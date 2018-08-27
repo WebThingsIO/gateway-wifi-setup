@@ -11,6 +11,13 @@ exports.defineNetwork = defineNetwork;
 exports.removeNetwork = removeNetwork;
 exports.getKnownNetworks = getKnownNetworks;
 exports.broadcastBeacon = broadcastBeacon;
+exports.waitForWiFi = waitForWiFi;
+
+// The Edison device can't scan for wifi networks while in AP mode, so
+// we've got to scan before we enter AP mode and save the results. They're a
+// global variable because this code needs to ship
+exports.preliminaryScanResults = [];
+
 
 /**
  * Determine whether we have a wifi connection with the `wpa_cli
@@ -26,7 +33,7 @@ function getStatus() {
 
 /**
  * Determine the ssid of the wifi network we are connected to.
- * This function returns a Promise that resolves to a string. 
+ * This function returns a Promise that resolves to a string.
  * The string will be empty if not connected.
  */
 function getConnectedNetwork() {
@@ -49,23 +56,24 @@ function getConnectedNetwork() {
  */
 function scan(numAttempts) {
   numAttempts = numAttempts || 1;
-  return new Promise(function(resolve, reject) {
+  return new Promise(function(resolve) {
     let attempts = 0;
 
     function tryScan() {
       attempts++;
 
       _scan()
-        .then(out => { resolve(out.length ? out.split('\n') : []);})
-        .catch(err => {
-          console.error('Scan attempt', attempts, 'failed:', err.message||err);
+        .then((out) => {
+          resolve(out.length ? out.split('\n') : []);
+        })
+        .catch((err) => {
+          console.error('Scan attempt', attempts, 'failed:',
+                        err.message || err);
 
           if (attempts >= numAttempts) {
             console.error('Giving up. No scan results available.');
             resolve([]);
-            return;
-          }
-          else {
+          } else {
             console.error('Will try again in 3 seconds.');
             setTimeout(tryScan, 3000);
           }
@@ -76,7 +84,7 @@ function scan(numAttempts) {
   });
 
   function _scan() {
-    return run(platform.scan)
+    return run(platform.scan);
   }
 }
 
@@ -133,7 +141,7 @@ function stopAP() {
 function defineNetwork(ssid, password) {
   return run(password ? platform.defineNetwork : platform.defineOpenNetwork, {
     SSID: ssid,
-    PSK: password
+    PSK: password,
   });
 }
 
@@ -149,7 +157,7 @@ function removeNetwork(id) {
  */
 function getKnownNetworks() {
   return run(platform.getKnownNetworks)
-    .then(out => out.length ? out.split('\n') : []);
+    .then((out) => out.length ? out.split('\n') : []);
 }
 
 /**
@@ -163,7 +171,7 @@ function broadcastBeacon() {
 
   // Check out wlan0 first.
   if (ifaces.hasOwnProperty('wlan0')) {
-    for (const addr of ifaces['wlan0']) {
+    for (const addr of ifaces.wlan0) {
       if (addr.family !== 'IPv4' || addr.internal) {
         continue;
       }
@@ -175,7 +183,7 @@ function broadcastBeacon() {
 
   // If we didn't get an IP address, check out eth0.
   if (ip === null && ifaces.hasOwnProperty('eth0')) {
-    for (const addr of ifaces['eth0']) {
+    for (const addr of ifaces.eth0) {
       if (addr.family !== 'IPv4' || addr.internal) {
         continue;
       }
@@ -196,7 +204,7 @@ function broadcastBeacon() {
 
   // Length byte
   const length1 = 14 + ip.length;
-  cmd += ' ' + length1.toString(16);
+  cmd += ` ${length1.toString(16)}`;
 
   // Flags
   cmd += ' 02 01 06';
@@ -206,7 +214,7 @@ function broadcastBeacon() {
 
   // Length byte
   const length2 = 6 + ip.length;
-  cmd += ' ' + length2.toString(16);
+  cmd += ` ${length2.toString(16)}`;
 
   // Service data type value
   cmd += ' 16';
@@ -224,10 +232,83 @@ function broadcastBeacon() {
   cmd += ' 02';
 
   // URL
-  cmd += ' ' + ip.split('').map((x) => x.charCodeAt(0).toString(16)).join(' ');
+  cmd += ` ${ip.split('').map((x) => x.charCodeAt(0).toString(16)).join(' ')}`;
 
   // Trailer
   cmd += ' 00 00 00 00 00 00 00 00';
 
   return run(cmd);
+}
+
+// Return a promise, then check every interval ms for a wifi connection.
+// Resolve the promise when we're connected. Or, if we aren't connected
+// after maxAttempts attempts, then reject the promise
+function waitForWiFi(maxAttempts, interval) {
+  return new Promise(function(resolve, reject) {
+    let attempts = 0;
+
+    // first of all we query wpa_supplicant if there's a wifi AP configured
+    run(platform.listNetworks)
+      .then((out) => {
+        console.log('List Networks command executed:', out);
+        if (out.includes('\n0\t')) {
+          // there's at least one wifi AP configured. Let's wait to see if it
+          // will connect
+          check();
+        } else {
+          // No wifi AP configured. Let's skip the wait and start the setup
+          // immediately
+          reject();
+        }
+      })
+      .catch((err) => console.error('Error listing Networks:', err));
+
+
+    function check() {
+      attempts++;
+      console.log('check', attempts);
+      getStatus()
+        .then((status) => {
+          console.log(status);
+          if (status === 'COMPLETED') {
+            console.log('WiFi connection found. resolving');
+            checkForAddress();
+            console.log('resolved');
+          } else {
+            console.log('No wifi connection on attempt', attempts);
+            retryOrGiveUp();
+          }
+        })
+        .catch((err) => {
+          console.error('Error checking wifi on attempt', attempts, ':', err);
+          retryOrGiveUp();
+        });
+    }
+
+    function checkForAddress() {
+      const ifaces = os.networkInterfaces();
+
+      if (ifaces.hasOwnProperty('wlan0')) {
+        for (const addr of ifaces.wlan0) {
+          if (addr.family !== 'IPv4' || addr.internal) {
+            continue;
+          }
+
+          resolve();
+          return;
+        }
+      }
+
+      retryOrGiveUp();
+    }
+
+    function retryOrGiveUp() {
+      if (attempts >= maxAttempts) {
+        console.error('Giving up. No wifi available.');
+        reject();
+      } else {
+        setTimeout(check, interval);
+      }
+    }
+  });
 }
