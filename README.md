@@ -100,7 +100,7 @@ DAEMON_CONF="/etc/hostapd/hostapd.conf"
 this step is not necessary on Edison.
 
 - Copy `config/hostapd.conf` to `/etc/hostapd/hostapd.conf`.  This
-  config file defines the access point name "Mozilla IoT Gateway". Edit 
+  config file defines the access point name "WebThings Gateway". Edit 
   it if
   you want to use a different name. On Edison
   `/etc/hostapd/hostapd.conf` alread exists. You may want to rename

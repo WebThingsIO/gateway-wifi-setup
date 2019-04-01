@@ -1,5 +1,5 @@
 [Unit]
-Description=Mozilla IoT Gateway Wifi Setup
+Description=Mozilla WebThings Gateway Wifi Setup
 After=network.target
 
 [Service]
