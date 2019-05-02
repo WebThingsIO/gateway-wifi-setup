@@ -29,7 +29,7 @@ First, clone this repo and download its dependencies from npm:
 
 ```
 $ git clone https://github.com/mozilla-iot/gateway-wifi-setup
-$ cd gateway-wifi-setup.setup
+$ cd gateway-wifi-setup
 $ npm install
 ```
 
